@@ -1,3 +1,4 @@
+"use client";
 import { Product } from "../types/product";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
