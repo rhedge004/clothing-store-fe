@@ -1,11 +1,30 @@
 // app/page.tsx
+"use client";
+
+import { useEffect, useState } from "react";
 import { getProducts } from "@/lib/api";
 import CategoryBanner from "@/components/CategoryBanner";
 import FeaturedSlider from "@/components/FeaturedSlider";
+import { Product } from "@/types/product";
 import Link from "next/link";
 
-export default async function HomePage() {
-  const allProducts = await getProducts();
+export default function HomePage() {
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getProducts()
+      .then((data) => {
+        setAllProducts(data || []);
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading) {
+    return <div className="bg-white min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
   const featured = allProducts.slice(0, 8);
 
   return (
